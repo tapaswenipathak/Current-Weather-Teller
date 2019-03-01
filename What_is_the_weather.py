@@ -1,5 +1,5 @@
-from Tkinter import *
-import tkMessageBox
+from tkinter import *
+from tkinter import messagebox
 import requests
 import json
 import sys
@@ -7,7 +7,7 @@ import sys
 class App (object):
   def __init__(self):
     self.root = Tk ()
-    self.root.geometry ("300x300")
+    self.root.geometry ("300x200")
     self.root.wm_title ("Weather")
     self.label = Label (self.root, text= "Enter your city.")
     self.label.pack ()
@@ -30,14 +30,20 @@ class App (object):
     
 	#Loading JSON
     j = json.loads (r.text)
-	
 	#Extract the temperature
-    temperature = str ( j['main']['temp'] - 273 ) + "C"
+    try:
+    	temperature = str ( j['main']['temp'] - 273 )
     
 	#Output
-    result = temperature
-    self.label.configure (text = result)
-
+    	result = temperature[0:5]+"C"
+    	self.label.configure (text = result)
+	#enhancement #ourreviewfeature
+    	if float(temperature[0:5])>35.00:
+    		messagebox.showinfo("Our review","Its to hot there!!!\n"+result)
+    	if float(temperature[0:5])<10.00:
+    		messagebox.showinfo("Our review","Its to cold there!!!\n"+result)
+    except KeyError:
+    	messagebox.showinfo("Sorry","Match for this city not found")
   def button_click (self, e):
     pass
 
